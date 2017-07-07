@@ -45,8 +45,9 @@
         this.leftArrow = options.leftArrow || '<i class="' + this.faCSSprefix + ' ' + this.faCSSprefix + '-chevron-left fi-arrow-left"/>';
         this.rightArrow = options.rightArrow || '<i class="' + this.faCSSprefix + ' ' + this.faCSSprefix + '-chevron-right fi-arrow-right"/>';
         this.closeIcon = options.closeIcon || '<i class="' + this.faCSSprefix + ' ' + this.faCSSprefix + '-remove ' + this.faCSSprefix + '-times fi-x"></i>';
+        this.rightPadding = options.rightPadding || 0;
+        this.topPadding = options.topPadding || 0;
 
-        
 
         this.minView = 0;
         if ('minView' in options) {
@@ -208,7 +209,7 @@
                             click: (this.element.attr('readonly')) ? $.proxy(this.show, this) : function() {}
                         }]
                     ];
-                } 
+                }
             }
             else if (this.component && this.hasInput) { // component: input + button
                 this._events = [
@@ -393,7 +394,7 @@
             var offset = textbox.offset();
             var height = textbox.outerHeight() + parseInt(textbox.css('margin-top'));
             var width = textbox.outerWidth() + parseInt(textbox.css('margin-left'));
-            var fullOffsetTop = offset.top + height;
+            var fullOffsetTop = offset.top + height + this.topPadding;
             var offsetLeft = offset.left;
             this.picker.removeClass('datepicker-top datepicker-bottom');
             // can we show it on top?
@@ -412,9 +413,9 @@
 
             // if the datepicker is going to go past the right side of the window, we want
             // to set the right position so the datepicker lines up with the textbox
-            if (offset.left + this.picker.width() >= $(window).width()) {
-                offsetLeft = (offset.left + width) - this.picker.width();
-            }
+            // if (offset.left + this.picker.width() >= $(window).width()) {
+                offsetLeft = (offset.left + width) - this.picker.outerWidth() - this.rightPadding;
+            // }
             this.picker.css({
                 top: fullOffsetTop,
                 left: offsetLeft,
@@ -428,14 +429,14 @@
             if (arguments && arguments.length && (typeof arguments[0] === 'string' || arguments[0] instanceof Date)) {
                 date = arguments[0];
                 fromArgs = true;
-            } 
-            else if (!currentVal && this.initialDate != null) { // If value is not set, set it to the initialDate 
+            }
+            else if (!currentVal && this.initialDate != null) { // If value is not set, set it to the initialDate
                 date = this.initialDate
             }
             else {
                 date = this.isInput ? this.element.val() : this.element.data('date') || this.element.find('input').val();
             }
-    
+
             if (date && date.length > this.formatText.length) {
                     $(this.picker).addClass('is-invalid')
                     $(this.element).addClass('is-invalid-input')
@@ -443,10 +444,10 @@
             } else {
                 $(this.picker).removeClass('is-invalid')
                 $(this.element).removeClass('is-invalid-input')
-                  
+
             }
-        
-            this.date = DPGlobal.parseDate(date, this.format, this.language);  
+
+            this.date = DPGlobal.parseDate(date, this.format, this.language);
 
             if (fromArgs || this.initialDate != null) this.setValue();
 
@@ -505,13 +506,16 @@
             // this.picker.find('.datepicker-days thead th.date-switch')
             // 			.text(DPGlobal.formatDate(new UTCDate(year, month), titleFormat, this.language));
 
-            this.picker.find('.datepicker-days thead th:eq(1)')
-                .text(dates[this.language].months[month] + ' ' + year);
+            // this.picker.find('.datepicker-days thead th:eq(1)')
+            //     .text(dates[this.language].months[month] + ' ' + year);
+            this.picker.find('.date-switch__month')
+                .text(dates[this.language].monthsShort[month]);
+            this.picker.find('.date-switch__year')
+                .text(year);
             this.picker.find('.datepicker-hours thead th:eq(1)')
                 .text(dayMonth + ' ' + dates[this.language].months[month] + ' ' + year);
             this.picker.find('.datepicker-minutes thead th:eq(1)')
                 .text(dayMonth + ' ' + dates[this.language].months[month] + ' ' + year);
-
 
             this.picker.find('tfoot th.today')
                 .text(dates[this.language].today)
@@ -638,18 +642,14 @@
             switch (this.viewMode) {
                 case 0:
                     if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear() && month <= this.startDate.getUTCMonth() && day <= this.startDate.getUTCDate() && hour <= this.startDate.getUTCHours()) {
-                        this.picker.find('.prev').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.prev').addClass('hidden-element')
                     } else {
                         this.picker.find('.prev').css({
                             visibility: 'visible'
                         });
                     }
                     if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear() && month >= this.endDate.getUTCMonth() && day >= this.endDate.getUTCDate() && hour >= this.endDate.getUTCHours()) {
-                        this.picker.find('.next').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.next').addClass('hidden-element')
                     } else {
                         this.picker.find('.next').css({
                             visibility: 'visible'
@@ -658,63 +658,39 @@
                     break;
                 case 1:
                     if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear() && month <= this.startDate.getUTCMonth() && day <= this.startDate.getUTCDate()) {
-                        this.picker.find('.prev').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.prev').addClass('hidden-element')
                     } else {
-                        this.picker.find('.prev').css({
-                            visibility: 'visible'
-                        });
+                        this.picker.find('.prev').removeClass('hidden-element');
                     }
                     if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear() && month >= this.endDate.getUTCMonth() && day >= this.endDate.getUTCDate()) {
-                        this.picker.find('.next').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.next').addClass('hidden-element')
                     } else {
-                        this.picker.find('.next').css({
-                            visibility: 'visible'
-                        });
+                        this.picker.find('.next').removeClass('hidden-element');
                     }
                     break;
                 case 2:
                     if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear() && month <= this.startDate.getUTCMonth()) {
-                        this.picker.find('.prev').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.prev').addClass('hidden-element')
                     } else {
-                        this.picker.find('.prev').css({
-                            visibility: 'visible'
-                        });
+                        this.picker.find('.prev').removeClass('hidden-element');
                     }
                     if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear() && month >= this.endDate.getUTCMonth()) {
-                        this.picker.find('.next').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.next').addClass('hidden-element')
                     } else {
-                        this.picker.find('.next').css({
-                            visibility: 'visible'
-                        });
+                        this.picker.find('.next').removeClass('hidden-element');
                     }
                     break;
                 case 3:
                 case 4:
                     if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear()) {
-                        this.picker.find('.prev').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.prev').addClass('hidden-element')
                     } else {
-                        this.picker.find('.prev').css({
-                            visibility: 'visible'
-                        });
+                        this.picker.find('.prev').removeClass('hidden-element');
                     }
                     if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear()) {
-                        this.picker.find('.next').css({
-                            visibility: 'hidden'
-                        });
+                        this.picker.find('.next').addClass('hidden-element')
                     } else {
-                        this.picker.find('.next').css({
-                            visibility: 'visible'
-                        });
+                        this.picker.find('.next').removeClass('hidden-element');
                     }
                     break;
             }
@@ -1107,13 +1083,13 @@
             this.picker.find('>div').hide().filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName).css('display', 'block');
             this.updateNavArrows();
         },
-		
+
 		changeViewDate: function(date) {
 			this.date = date;
 			this.viewDate = date;
 			this.fill();
 		},
-		
+
         reset: function(e) {
             this._setDate(null, 'date');
         }
@@ -1370,9 +1346,9 @@
         },
         headTemplate: function(leftArrow, rightArrow) {return('<thead>' +
             '<tr>' +
-            '<th class="prev">' + leftArrow + '</th>' +
-            '<th colspan="5" class="date-switch"></th>' +
-            '<th class="next">' + rightArrow + '</th>' +
+            '<th colspan="2" class="prev">' + leftArrow + '</th>' +
+            '<th colspan="3" class="date-switch"><div class="date-switch__month"></div><div class="date-switch__year"></div></th>' +
+            '<th colspan="2" class="next">' + rightArrow + '</th>' +
             '</tr>' +
             '</thead>')},
         contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
@@ -1414,7 +1390,7 @@
         DPGlobal.footTemplate +
         '</table>' +
         '</div>' +
-        '<a class="button datepicker-close tiny alert right" style="width:auto;">' + closeIcon + '</a>' +
+        '<a class="datepicker-close tiny alert right">' + closeIcon + '</a>' +
         '</div>')};
 
     $.fn.fdatepicker.DPGlobal = DPGlobal;

@@ -1,200 +1,251 @@
-// fdatepicker variables and their defaults
-$fdatepicker-ui-primary: #2ba6cb !default;
-$fdatepicker-ui-color: #000 !default;
-$fdatepicker-ui-bg: #fff !default;
-$fdatepicker-ui-disabled: #eee !default;
-$fdatepicker-ui-border-color: #000 !default;
-$fdatepicker-ui-border-transparency: 0.2 !default;
-$fdatepicker-ui-border: 1px solid rgba($fdatepicker-ui-color, $fdatepicker-ui-border-transparency) !default;
-$fdatepicker-ui-shadow: 0 5px 10px rgba($fdatepicker-ui-color, $fdatepicker-ui-border-transparency) !default;
-$fdatepicker-ui-border-radius: 5px !default;
-$fdatepicker-ui-before-color: #ccc !default;
-$fdatepicker-ui-old-new-color: #999 !default;
-$fdatepicker-ui-text-color: #333 !default;
-$fdatepicker-inline-width: 220px !default;
+$white: #fff;
+$table-bg: #d9d9d9;
+$link-hover: #017db9;
+$tablet: 758px;
+$copy: #545659;
+$form-required: #dce9f4;
+$error: #d50e1f;
+$form-inactive: $white;
+$form-inactive-border: #807e84;
+$input-font-size-desktop: 24px;
+$date-picker-border: #cdcdcd;
+$date-picker-text: #525252;
+$date-picker-selected: #027eb9;
 
-// uncomment if used with foundation 5 to get compatible defaults, thanks jamesstoneco
-// $fdatepicker-ui-primary: $primary-color;
-// $fdatepicker-ui-bg: $f-dropdown-bg;
-// $fdatepicker-ui-text-color: $body-font-color;
-// $fdatepicker-ui-disabled: rgba($primary-color, 0.7);
-// $fdatepicker-ui-before-color: $secondary-color;
-// $fdatepicker-ui-border-transparency: 0.2 !default;
-// $fdatepicker-ui-border: $f-dropdown-border-style $f-dropdown-border-width $f-dropdown-border-color;
-// $fdatepicker-ui-shadow: none;
-// $fdatepicker-ui-border-radius: 0;
-// $fdatepicker-ui-before-color: lighten($fdatepicker-ui-text-color, 30%);
-// $fdatepicker-ui-old-new-color: lighten($fdatepicker-ui-text-color, 20%);
-// $fdatepicker-inline-width: $f-dropdown-max-width;
+$padding: rem-calc(18);
 
-// foundation 6 compatible
-// $fdatepicker-ui-primary: $primary-color;
-// $fdatepicker-ui-bg: $menu-dropdown-bg-color;
-// $fdatepicker-ui-text-color: $body-font-color;
-// $fdatepicker-ui-disabled: rgba($primary-color, 0.7);
-// $fdatepicker-ui-before-color: $secondary-color;
-// $fdatepicker-ui-border-transparency: 0.2 !default;
-// $fdatepicker-ui-border: $dropdownmenu-border;
-// $fdatepicker-ui-shadow: none;
-// $fdatepicker-ui-border-radius: 0;
-// $fdatepicker-ui-before-color: lighten($fdatepicker-ui-text-color, 30%);
-// $fdatepicker-ui-old-new-color: lighten($fdatepicker-ui-text-color, 20%);
-// $fdatepicker-inline-width: 200px;
 
-@mixin datepicker() {
-	text-align: center;
-	width: 20px;
-	height: 20px;
-	border: 0;
-	font-size: 12px;
-	padding: 4px 8px;
-	background: $fdatepicker-ui-bg;
-	cursor: pointer;
+// Form Control styles
+.form-date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  &__label {
+    line-height: 1.4;
+    color: $copy;
+    width: 50%;
+  }
+
+  &__group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    position: relative;
+    max-width: rem-calc(341);
+
+    @media screen and (min-width: $tablet) {
+        max-width: rem-calc(400);
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    font-size: rem-calc(20);
+    color: $link-hover;
+    right: rem-calc(28);
+    pointer-events: none;
+    cursor: pointer;
+
+    @media screen and (min-width: $tablet) {
+        font-size: rem-calc(28);
+        right: rem-calc(25);
+    }
+  }
+
+  input[type="text"] {
+    height: rem-calc(38);
+    padding-left: $padding;
+    margin: 0;
+
+
+    &:required {
+      background-color: $form-required;
+    }
+
+    &.error {
+      border: solid 1px $error;
+      color: $error;
+
+      & + label {
+        color: $error;
+      }
+    }
+
+    &[readonly] {
+      background: $form-inactive;
+      border: solid 1px $form-inactive-border;
+    }
+
+    @media screen and (min-width: $tablet) {
+      height: rem-calc(54);
+      font-size: $input-font-size-desktop;
+    }
+  }
 }
 
-.datepicker {
+// Date Picker styles
+.datepicker.dropdown-menu {
 	display: none;
-	position: absolute;
-	padding: 4px;
+	padding: rem-calc(2);
 	margin-top: 1px;
 	direction: ltr;
-	&.dropdown-menu {
-		position: absolute;
-		top: 100%;
-		left: 0;
-		z-index: 1000;
-		float: left;
-		display: none;
-		min-width: 160px;
-		list-style: none;
-		background-color: $fdatepicker-ui-bg;
-		border: $fdatepicker-ui-border;
+  line-height: 1;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  float: left;
+  list-style: none;
+  background-color: $white;
+  border: solid 2px $date-picker-border;
+  color: $date-picker-text;
+  font-size: rem-calc(20);
 
-		-webkit-border-radius: $fdatepicker-ui-border-radius;
-		-moz-border-radius: $fdatepicker-ui-border-radius;
-		border-radius: $fdatepicker-ui-border-radius;
+  // Header
+  thead tr:first-child {
+    height: rem-calc(50);
+    background: $link-hover;
+    color: $white;
 
-		-webkit-box-shadow: $fdatepicker-ui-shadow;
-		-moz-box-shadow: $fdatepicker-ui-shadow;
-		box-shadow: $fdatepicker-ui-shadow;
-
-		-webkit-background-clip: padding-box;
-		-moz-background-clip: padding;
-		background-clip: padding-box;
-
-		*border-right-width: 2px;
-		*border-bottom-width: 2px;
-		color: $fdatepicker-ui-text-color;
-		font-size: 13px;
-		line-height: 18px;
-		th { padding: 4px 5px; }
-		td { padding: 4px 5px; }
+    &:after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: rem-calc(14) solid transparent;
+      border-right: rem-calc(14) solid transparent;
+      border-bottom: rem-calc(18) solid $link-hover;
+      display: inline-block;
+      position: absolute;
+      top: - #{rem-calc(16)};
+      right: rem-calc(10);
+    }
 	}
-	table {
+
+  &.datepicker-top {
+    thead tr:first-child:after {
+      display: none;
+    }
+  }
+
+  thead tr:last-child {
+    th {
+      padding-top: rem-calc(5);
+      text-transform: uppercase;
+    }
+	}
+
+  .date-switch {
+    padding: 0;
+    width: 145px;
+    pointer-events: none;
+
+    &__month {
+      font-size: rem-calc(20);
+    }
+
+    &__year {
+      font-size: rem-calc(15);
+    }
+  }
+
+  %date-picker-arrow {
+    font-size: rem-calc(20);
+
+    &:hover {
+      color: $table-bg;
+    }
+
+    @media screen and (min-width: $tablet) {
+      font-size: rem-calc(28);
+    }
+  }
+
+  .prev {
+    @extend %date-picker-arrow;
+    text-align: right;
+    padding-right: rem-calc(30);
+  }
+
+  .next {
+    @extend %date-picker-arrow;
+    text-align: left;
+    padding-left: rem-calc(30);
+  }
+
+  // Common
+  table {
 		border: 0;
+    border-spacing: 0;
 		margin: 0;
 		width: auto;
-		tr td span {
-			display: block;
-			width: 23%;
-			height: 54px;
-			line-height: 54px;
-			float: left;
-			margin: 1%;
-			cursor: pointer;
-		}
 	}
+
+  %date-picker-cell {
+    padding: rem-calc(6);
+    font-weight: normal;
+    cursor: pointer;
+    text-align: center;
+
+    @media screen and (min-width: $tablet) {
+      padding: rem-calc(12);
+    }
+  }
+
+  th {
+    @extend %date-picker-cell;
+	}
+
 	td {
-		text-align: center;
-		width: 20px;
-		height: 20px;
-		border: 0;
-		font-size: 12px;
-		padding: 4px 8px;
-		background: $fdatepicker-ui-bg;
-		cursor: pointer;
-		&.active.day, &.active.year { background: $fdatepicker-ui-primary; }
-		&.old , &.new { color: $fdatepicker-ui-old-new-color; }
-		span.active { background: $fdatepicker-ui-primary; }
-		&.day.disabled { color: $fdatepicker-ui-disabled; }
-		span.month.disabled, span.year.disabled {
-			color: $fdatepicker-ui-disabled;
-		}
-	}
-	th {
-		text-align: center;
-		width: 20px;
-		height: 20px;
-		border: 0;
-		font-size: 12px;
-		padding: 4px 8px;
-		background: $fdatepicker-ui-bg;
-		cursor: pointer;
-		&.active.day, &.active.year { background: $fdatepicker-ui-primary; }
-		&.date-switch { width: 145px; }
-		span.active { background: $fdatepicker-ui-primary; }
-	}
-	.cw {
-		font-size: 10px;
-		width: 12px;
-		padding: 0 2px 0 5px;
-		vertical-align: middle;
-	}
-	&.days div.datepicker-days { display: block; }
-	&.months div.datepicker-months { display: block; }
-	&.years div.datepicker-years { display: block; }
-	thead tr:first-child th {
-		cursor: pointer;
-		&.cw {
-			cursor: default;
-			background-color: transparent;
-		}
-	}
-	tfoot tr:first-child th { cursor: pointer; }
-}
-.datepicker-inline { width: $fdatepicker-inline-width; }
-.datepicker-rtl {
-	direction: rtl;
-	table tr td span { float: right; }
-}
-.datepicker-dropdown {
-	top: 0;
-	left: 0;
-	&:before {
-		content: '';
-		display: inline-block;
-		border-left: 7px solid transparent;
-		border-right: 7px solid transparent;
-		border-bottom: 7px solid $fdatepicker-ui-before-color;
-		border-bottom-color: $fdatepicker-ui-border;
-		position: absolute;
-		top: -7px;
-		left: 6px;
-	}
-	&:after {
-		content: '';
-		display: inline-block;
-		border-left: 6px solid transparent;
-		border-right: 6px solid transparent;
-		border-bottom: 6px solid $fdatepicker-ui-bg;
-		position: absolute;
-		top: -6px;
-		left: 7px;
+    @extend %date-picker-cell;
+    border: solid 2px transparent;
+		width: rem-calc(40);
+		height: rem-calc(40);
+
+    @media screen and (min-width: $tablet) {
+      width: rem-calc(52);
+		  height: rem-calc(52);
+    }
+
+    &:hover,
+		&.active.day {
+      border-color: $date-picker-selected;
+    }
+
+		&.old,
+    &.new {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+		&.day.disabled {
+      color: $table-bg;
+    }
 	}
 }
-.datepicker>div,
-.datepicker-dropdown::before,
-.datepicker-dropdown::after { display: none; }
+
+// Close button
 .datepicker-close {
-	position: absolute;
-	top: -30px;
-	right: 0;
-	width: 15px;
-	height: 30px;
-	padding: 0;
-	display: none;
+  position: absolute;
+  top: rem-calc(5);
+  right: 0;
+  text-align: center;
+  width: rem-calc(40);
+  height:rem-calc(40);
+  padding: 0;
+  display: none;
+  color: $white;
+  font-size: rem-calc(20);
+
+  &:hover {
+    color: $table-bg;
+  }
+
+  @media screen and (min-width: $tablet) {
+    font-size: rem-calc(28);
+  }
 }
-.table-striped .datepicker table tr td,
-.table-striped .datepicker table tr th {
-	background-color: transparent;
-}
+
