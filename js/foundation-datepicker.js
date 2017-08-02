@@ -407,8 +407,8 @@
             }
             else {
                 // Scroll up if we cannot show it on bottom or top (for mobile devices)
-                if (!canShowBottom) $(window).scrollTop(offset.top);
-                this.picker.addClass('datepicker-bottom');
+                // if (!canShowBottom) $(window).scrollTop(offset.top);
+                // this.picker.addClass('datepicker-bottom');
             }
 
             // if the datepicker is going to go past the right side of the window, we want
